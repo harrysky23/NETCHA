@@ -2,7 +2,6 @@ import { lazy, Suspense, useState } from 'react'
 import { StartScreen } from './components/StartScreen'
 import { PixelEditor } from './components/PixelEditor'
 import { CharacterPreview } from './components/CharacterPreview'
-
 import { createDefaultCharacter, type PixelCharacter } from './types/character'
 import './App.css'
 
