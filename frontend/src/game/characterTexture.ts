@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import { CHARACTER_MASK } from '../data/characterMask'
-import { PALETTE } from '../data/palette'
-import { isPixelCharacter, type PixelCharacter } from '../types/character'
+import { characterColor, isPixelCharacter, type PixelCharacter } from '../types/character'
 
 export const CHARACTER_TEXTURE_KEY = 'painted-character'
 
@@ -18,9 +17,9 @@ export function createCharacterTexture(
   const context = texture.getContext()
   context.imageSmoothingEnabled = false
   context.clearRect(0, 0, 16, 16)
-  character.colors.forEach((color, index) => {
+  character.colors.forEach((_, index) => {
     if (!CHARACTER_MASK[index]) return
-    context.fillStyle = PALETTE[color].hex
+    context.fillStyle = characterColor(character, index)
     context.fillRect(index % 16, Math.floor(index / 16), 1, 1)
   })
   texture.refresh()

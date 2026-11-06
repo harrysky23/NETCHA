@@ -3,6 +3,7 @@ import { CHARACTER_MASK, CHARACTER_SIZE } from '../data/characterMask'
 import { PALETTE, type PaletteIndex } from '../data/palette'
 import {
   createDefaultCharacter,
+  characterColor,
   paintLine,
   type PixelCharacter,
   type PixelPoint,
@@ -115,10 +116,10 @@ export function PixelEditor({ initialCharacter, onComplete, onBack }: Props) {
                   className={`pixel-cell ${CHARACTER_MASK[index] ? 'paintable' : ''}`}
                   key={index}
                   disabled={!CHARACTER_MASK[index]}
-                  aria-label={`${Math.floor(index / 16) + 1}행 ${(index % 16) + 1}열, ${PALETTE[color].name}`}
+                  aria-label={`${Math.floor(index / 16) + 1}행 ${(index % 16) + 1}열, ${PALETTE[color]?.name ?? characterColor(character, index)}`}
                   style={{
                     backgroundColor: CHARACTER_MASK[index]
-                      ? PALETTE[color].hex
+                      ? characterColor(character, index)
                       : undefined,
                   }}
                   onClick={(event) => {

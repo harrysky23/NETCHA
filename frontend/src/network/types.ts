@@ -10,6 +10,7 @@ export type RoomPlayer = {
   alive: boolean
   score: number
   colors: number[]
+  palette: string[]
   painting: boolean
   connected: boolean
   spectatingId: string | null
@@ -25,6 +26,7 @@ export type RoomSnapshot = {
   phaseStartedAt: number
   phaseEndsAt: number
   roundNumber: number
+  practice: boolean
   winner: Role | null
   resultReason: 'all_hiders_caught' | 'time_up' | null
   spectatingId: string | null
@@ -46,7 +48,8 @@ export type GameMessage =
   | { type: 'return_lobby' }
   | { type: 'input'; keys: { up: boolean; down: boolean; left: boolean; right: boolean } }
   | { type: 'paint_mode'; enabled: boolean }
-  | { type: 'paint'; colors: number[] }
+  | { type: 'paint'; colors: number[]; palette: string[] }
+  | { type: 'viewport'; width: number; height: number }
   | { type: 'shoot'; x: number; y: number }
   | { type: 'spectate'; targetId: string | null }
   | { type: 'chat'; text: string }

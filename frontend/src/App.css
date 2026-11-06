@@ -981,6 +981,96 @@
   .online-sidebar { display: grid; grid-template-columns: 1fr 1fr; }
   .online-sidebar .room-chat, .online-sidebar .game-controls-note { grid-column: 1 / -1; }
 }
+
+/* The match fills the browser viewport; React panels float above Phaser. */
+.app-shell.is-playing { max-width: none; padding: 0; }
+body:has(.immersive-game) { overflow: hidden; }
+.immersive-game { position: fixed; inset: 0; width: 100vw; height: 100dvh; background: #617983; overflow: hidden; }
+.game-stage.immersive-stage { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; background: #617983; }
+.immersive-stage .game-mount { width: 100%; height: 100%; }
+.immersive-stage .game-mount canvas { image-rendering: pixelated; }
+.immersive-stage .game-mount:focus-visible { outline: none; }
+.game-hud { position: absolute; inset: 0; z-index: 8; pointer-events: none; color: #e8ecdd; font-family: ui-monospace, 'Apple SD Gothic Neo', monospace; }
+.hud-status, .hud-score, .hud-chat { position: absolute; pointer-events: auto; }
+.hud-status, .hud-score, .hud-chat .room-chat { background: #172d37ed; border: 2px solid #829c98; border-radius: 0; box-shadow: 4px 4px 0 #14232b3d; color: #e8ecdd; }
+.hud-status { top: 20px; left: 20px; min-width: 230px; padding: 12px 14px; }
+.hud-room { display: flex; align-items: center; gap: 7px; color: #b3c6bb; font-size: 9px; letter-spacing: 1px; }
+.hud-room > span:last-child { margin-left: auto; padding-left: 20px; color: #819c9f; letter-spacing: 0; }
+.hud-status-main { margin-top: 9px; display: flex; align-items: center; gap: 10px; }
+.hud-status .character-preview { height: 34px; width: 34px; background: #304b54; }
+.hud-status-main > div:not(.character-preview) { display: grid; gap: 3px; }
+.hud-role { color: #a1b7af; font-size: 10px; }
+.hud-status-main strong { color: #f5f3dd; font-size: 21px; line-height: 1.1; }
+.hud-status-main strong.urgent { color: #e4a18b; }
+.hud-exit { align-self: flex-start; margin-left: auto; padding: 0 0 0 20px; color: #a4b8b7; background: none; border: 0; line-height: 1; font-size: 20px; }
+.hud-exit:hover { color: #fff6db; }
+.hud-return { margin-top: 10px; padding: 5px 0 0; border: 0; border-top: 1px solid #6a85825e; width: 100%; text-align: left; color: #c4d3ad; font-size: 10px; background: none; }
+.hud-alive { margin-top: 8px; color: #8aa5a3; font-size: 9px; }
+.hud-score { top: 20px; right: 20px; width: 250px; padding: 12px 14px 7px; }
+.hud-panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.hud-panel-title h2 { font-size: 12px; }
+.hud-panel-title > span { font-size: 8px; letter-spacing: 1px; color: #8da6a4; }
+.hud-score-list { max-height: 35vh; overflow: auto; }
+.hud-score-row { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 5px; min-height: 31px; border-top: 1px solid #6e898438; font-size: 11px; }
+.hud-score-row > span:first-child { color: #7f9a9a; font-size: 9px; }
+.hud-score-row > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hud-score-row em { margin-left: 5px; font-size: 9px; font-style: normal; color: #98b7af; }
+.hud-score-row.me { color: #d6dfac; }
+.hud-score-row.eliminated { opacity: .5; }
+.hud-score-row strong { font-size: 11px; }
+.hud-chat { bottom: 20px; right: 20px; width: 310px; }
+.hud-chat .room-chat { min-height: 0; padding: 12px 13px; }
+.hud-chat .section-label h2 { color: #e0e8da; font-size: 12px; }
+.hud-chat .section-label > span { color: #8da6a4; font-size: 8px; }
+.hud-chat .chat-log { flex: none; min-height: 85px; height: 125px; max-height: 20vh; padding: 10px 0 4px; scrollbar-width: thin; scrollbar-color: #607f7b transparent; }
+.hud-chat .chat-line { grid-template-columns: max-content 1fr; gap: 8px; font-size: 11px; margin-bottom: 7px; }
+.hud-chat .chat-line strong { font-size: 10px; color: #a6c3b1; }
+.hud-chat .chat-line.mine strong { color: #dfc08e; }
+.hud-chat .chat-empty { color: #8aa29f; line-height: 1.6; font-size: 10px; }
+.hud-chat .chat-compose input { min-height: 32px; background: #0d232dc9; border: 1px solid #577872; color: #e8ecdd; font-size: 11px; padding: 0 9px; }
+.hud-chat .chat-compose input::placeholder { color: #78928e; }
+.hud-chat .chat-compose button { width: 34px; background: #6d8b7b; color: #f0f0d9; font-size: 19px; }
+.hud-chat .chat-hint { color: #849d94; font-size: 8px; }
+.hud-help { position: absolute; bottom: 20px; left: 20px; display: flex; gap: 15px; align-items: center; padding: 10px 13px; background: #172d37cf; font-size: 10px; color: #c0cfc4; }
+.hud-help span { display: inline-flex; gap: 7px; align-items: center; }
+.hud-help kbd { background: #426269; border: 1px solid #719086; padding: 3px 5px; color: #f0eed6; font-size: 9px; }
+.immersive-stage .paint-overlay { top: 148px; left: 20px; width: 280px; max-height: calc(100dvh - 215px); overflow-y: auto; padding: 14px; color: #e8ecdd; background: #172d37f5; border: 2px solid #829c98; border-radius: 0; box-shadow: 4px 4px #14232b3d; }
+.immersive-stage .paint-overlay .panel-bar { padding: 0 0 8px; color: #e8ecdd; border-color: #607f7750; font-size: 11px; }
+.immersive-stage .paint-overlay .text-button { color: #bdd1b7; }
+.paint-tools { display: flex; gap: 6px; margin: 11px 0 8px; }
+.paint-tools button { flex: 1; border: 1px solid #5e7b79; background: #29444d; color: #9db4ad; padding: 8px 5px; font-size: 11px; }
+.paint-tools button.active { background: #59766a; border-color: #c4d3ad; color: #f3f0db; }
+.paint-tools kbd { margin-left: 5px; padding: 1px 4px; background: #172d37; font-size: 9px; }
+.immersive-stage .paint-caption { color: #9db4ad; min-height: 14px; margin: 8px 0 10px; line-height: 1.4; }
+.immersive-stage .mini-grid { border: 1px solid #6e8c88; background: repeating-conic-gradient(#3f5860 0% 25%, #354e57 0% 50%) 0 0 / 24px 24px; }
+.immersive-stage .mini-palette { max-height: 95px; overflow-y: auto; padding: 3px; margin: 8px -3px 0; gap: 6px; }
+.immersive-stage .mini-palette button { border: 1px solid #8a9d8b; border-radius: 0; }
+.immersive-stage .mini-palette button.selected { outline: 2px solid #f0e9c6; }
+.immersive-stage .paint-overlay-footer { flex-wrap: wrap; gap: 4px; color: #b8c6b7; }
+.paint-overlay-footer > span { width: 100%; display: flex; gap: 7px; align-items: center; margin: 4px 0; font: 10px ui-monospace, monospace; }
+.paint-overlay-footer > span i { display: inline-block; width: 14px; height: 14px; border: 1px solid #b7c5b1; }
+.paint-hint { font-size: 10px; color: #aebda5; line-height: 1.5; margin-top: 6px; }
+.sampling-color .game-mount, .sampling-color .mini-grid { cursor: crosshair; }
+.immersive-stage .spectator-strip { top: 148px; left: 20px; right: auto; max-width: 50%; background: #172d37e8; color: #d5dfcd; border: 1px solid #829c98; }
+.immersive-stage .spectator-strip button { color: #d5dfcd; background: #38565d; border-color: #6e8c88; }
+.immersive-stage .spectating-banner { bottom: 75px; left: 20px; background: #172d37e8; color: #d5dfcd; border: 1px solid #829c98; }
+.immersive-stage .spectating-banner .text-button { color: #d9dca7; }
+.immersive-stage .hunter-wait-screen { color: #a7bbb2; background: #19303a; }
+.immersive-stage .hunter-wait-screen h2 { color: #e4e7d3; }
+
+@media (max-width: 720px) {
+  .hud-status { top: 10px; left: 10px; min-width: 170px; padding: 9px 10px; }
+  .hud-status-main strong { font-size: 17px; }
+  .hud-room > span:last-child { display: none; }
+  .hud-score { top: 10px; right: 10px; width: 170px; padding: 9px 10px 5px; }
+  .hud-panel-title > span { display: none; }
+  .hud-chat { bottom: 10px; right: 10px; width: min(270px, 47vw); }
+  .hud-chat .chat-log { height: 90px; min-height: 60px; }
+  .hud-help { bottom: 10px; left: 10px; padding: 7px; gap: 7px; flex-wrap: wrap; max-width: 45vw; font-size: 9px; }
+  .immersive-stage .paint-overlay { top: 132px; left: 10px; width: min(260px, 48vw); max-height: calc(100dvh - 195px); padding: 10px; }
+  .paint-tools button { padding: 6px 3px; font-size: 10px; }
+  .paint-tools kbd { display: none; }
+}
 @media (max-width: 650px) {
   .lobby-entry-grid, .room-lobby-grid, .results-layout { grid-template-columns: 1fr; }
   .lobby-rule-note { grid-column: auto; }

@@ -81,9 +81,9 @@ test('팔레트 선택 후 드래그하면 중간 픽셀까지 칠하고 완성 
   await pointer('pointerup', 105, 45, 0)
   await click('.complete-button')
   const character = complete.mock.calls[0][0]
-  for (let x = 3; x <= 10; x++) expect(character.colors[4 * 16 + x]).toBe(6)
+  for (let x = 3; x <= 10; x++) expect(character.colors[4 * 16 + x]).toBe(CHARACTER_MASK[4 * 16 + x] ? 6 : 0)
   expect(character.colors.filter((color: number) => color === 6)).toHaveLength(
-    8,
+    4,
   )
   expect(grid.setPointerCapture).toHaveBeenCalledWith(1)
   expect(grid.releasePointerCapture).toHaveBeenCalledWith(1)
@@ -120,7 +120,7 @@ test('캡처 손실 뒤에는 칠하지 않고 초기화는 기본 캐릭터를 
 
 test('키보드로 픽셀 버튼을 활성화해도 선택한 색으로 칠한다', async () => {
   await click('[aria-label="하늘 #7eaaa8"]')
-  await click('[aria-label="5행 7열, 이끼"]')
+  await click('[aria-label="5행 7열, 흰색"]')
   expect(host.querySelector('[aria-label="5행 7열, 하늘"]')).not.toBeNull()
   expect(
     host

@@ -20,11 +20,11 @@ export default function App() {
   const onStart = () => roomState.send({ type: 'start' })
 
   return (
-    <div className="app-shell">
-      <header className="site-header">
+    <div className={`app-shell ${page === 'game' ? 'is-playing' : ''}`}>
+      {page !== 'game' && <header className="site-header">
         <span className="brand"><span className="brand-mark" aria-hidden="true">▦</span> NETCHACAMELEON</span>
         <span className="version"><span className="live-dot" /> ONLINE HIDE & SEEK <span className="version-divider">/</span> 2–8 PLAYERS</span>
-      </header>
+      </header>}
 
       {page === 'start' && <StartScreen onStart={() => { roomState.clearError(); setShowLobby(true) }} />}
       {(page === 'join' || page === 'lobby') && (
@@ -43,34 +43,18 @@ export default function App() {
       )}
 
       {page === 'game' && session && room && (
-        <main className="workspace online-room game-workspace">
-          <div className="page-heading">
-            <div>
-              <p className="eyebrow">ROOM {room.code} · ROUND {room.roundNumber}</p>
-              <h1>{room.phase === 'hiding' ? '위장을 준비해.' : '가까울수록 더 벌어요.'}<span className="title-dot">.</span></h1>
-            </div>
-            <span className="phase-pill"><i />{room.phase === 'hiding' ? '30초 준비' : '수색 시작'}</span>
-          </div>
-          <div className="game-layout online-game-layout">
-            <section>
-              <div className="game-frame">
-                <div className="panel-bar"><span>CLASSROOM · 40 × 30 TILES</span><span>2–8 ONLINE</span></div>
-                <Suspense fallback={<p className="loading">강의실을 불러오는 중…</p>}>
-                  <GameCanvas room={room} session={session} send={roomState.send} />
-                </Suspense>
-              </div>
-              <div className="room-caption"><span>1,280 × 960 WORLD</span><span>C · PAINT / WASD · MOVE</span></div>
-            </section>
+        <main className="immersive-game" aria-label="학교 숨바꼭질 게임">
+            <Suspense fallback={<p className="game-status">학교를 불러오는 중…</p>}>
+              <GameCanvas room={room} session={session} send={roomState.send} />
+            </Suspense>
             <GameHUD
               room={room}
               session={session}
               connected={roomState.connection === 'connected'}
-              onStart={onStart}
               onLeave={roomState.leaveRoom}
               onChat={onChat}
               onReturn={() => roomState.send({ type: 'return_lobby' })}
             />
-          </div>
         </main>
       )}
 
@@ -89,7 +73,7 @@ export default function App() {
         </>
       )}
 
-      <footer className="site-footer"><span>A STUDY IN COLOR & CAMOUFLAGE</span><span>칠하고, 숨고, 한 발에 승부를.</span></footer>
+      {page !== 'game' && <footer className="site-footer"><span>A STUDY IN COLOR & CAMOUFLAGE</span><span>칠하고, 숨고, 한 발에 승부를.</span></footer>}
     </div>
   )
 }

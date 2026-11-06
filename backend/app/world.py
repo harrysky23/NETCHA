@@ -4,6 +4,7 @@ import asyncio
 import json
 import math
 import random
+import re
 import secrets
 import string
 import time
@@ -14,34 +15,23 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 MAP = json.loads((ROOT / "shared" / "map.json").read_text())
+CHARACTER = json.loads((ROOT / "shared" / "character.json").read_text())
+PAINT_MASK = tuple(pixel == "1" for row in CHARACTER["mask"] for pixel in row)
+DEFAULT_PALETTE = CHARACTER["palette"]
 MAP_WIDTH = int(MAP["columns"] * MAP["tileSize"])
 MAP_HEIGHT = int(MAP["rows"] * MAP["tileSize"])
-VIEW_WIDTH = 640
-VIEW_HEIGHT = 480
+VIEW_WIDTH = 800
+VIEW_HEIGHT = 600
 PLAYER_SPEED = 100.0
 PLAYER_HALF_WIDTH = 6.0
 PLAYER_HALF_HEIGHT = 7.0
 PAINTABLE_PHASES = {"hiding", "hunting"}
 RATE_BUCKETS = ((32.0, 30.0), (64.0, 10.0), (128.0, 3.0), (math.inf, 1.0))
 
-FURNITURE: tuple[dict[str, Any], ...] = tuple(MAP["furniture"])
-WALLS = (
-    {"x": 0.0, "y": 0.0, "width": float(MAP_WIDTH), "height": 32.0},
-    {"x": 0.0, "y": float(MAP_HEIGHT - 32), "width": float(MAP_WIDTH), "height": 32.0},
-    {"x": 0.0, "y": 0.0, "width": 32.0, "height": float(MAP_HEIGHT)},
-    {"x": float(MAP_WIDTH - 32), "y": 0.0, "width": 32.0, "height": float(MAP_HEIGHT)},
-)
+FURNITURE: tuple[dict[str, Any], ...] = tuple(item for item in MAP["furniture"] if item["solid"])
+WALLS = tuple(MAP["walls"])
 OBSTACLES = WALLS + FURNITURE
-SPAWNS = (
-    {"x": 640.0, "y": 480.0},
-    {"x": 288.0, "y": 288.0},
-    {"x": 992.0, "y": 272.0},
-    {"x": 992.0, "y": 688.0},
-    {"x": 288.0, "y": 688.0},
-    {"x": 704.0, "y": 272.0},
-    {"x": 704.0, "y": 688.0},
-    {"x": 416.0, "y": 464.0},
-)
+SPAWNS = tuple(MAP["spawns"])
 
 
 def _overlap(a: dict[str, float], b: dict[str, Any]) -> bool:
@@ -53,10 +43,10 @@ def _overlap(a: dict[str, float], b: dict[str, Any]) -> bool:
     )
 
 
-def _view_rect(x: float, y: float) -> tuple[float, float, float, float]:
-    left = min(max(x - VIEW_WIDTH / 2, 0.0), MAP_WIDTH - VIEW_WIDTH)
-    top = min(max(y - VIEW_HEIGHT / 2, 0.0), MAP_HEIGHT - VIEW_HEIGHT)
-    return left, top, left + VIEW_WIDTH, top + VIEW_HEIGHT
+def _view_rect(x: float, y: float, width: float = VIEW_WIDTH, height: float = VIEW_HEIGHT) -> tuple[float, float, float, float]:
+    left = min(max(x - width / 2, 0.0), MAP_WIDTH - width)
+    top = min(max(y - height / 2, 0.0), MAP_HEIGHT - height)
+    return left, top, left + width, top + height
 
 
 def _ray_box_distance(
@@ -85,12 +75,15 @@ class Player:
     player_id: str
     token: str
     name: str
-    x: float = 640.0
-    y: float = 480.0
+    x: float = SPAWNS[0]["x"]
+    y: float = SPAWNS[0]["y"]
     role: str = "hider"
     alive: bool = True
     score: float = 0.0
-    colors: list[int] = field(default_factory=lambda: [0] * 256)
+    colors: list[int] = field(default_factory=lambda: [CHARACTER["defaultColor"] if inside else 0 for inside in PAINT_MASK])
+    palette: list[str] = field(default_factory=lambda: list(DEFAULT_PALETTE))
+    view_width: float = VIEW_WIDTH
+    view_height: float = VIEW_HEIGHT
     painting: bool = False
     keys: dict[str, bool] = field(default_factory=dict)
     spectating_id: str | None = None
@@ -111,6 +104,7 @@ class GameRoom:
         self.winner: str | None = None
         self.result_reason: str | None = None
         self.round_number = 0
+        self.practice = False
         self.chat: list[dict[str, Any]] = []
         self.lock = asyncio.Lock()
         self.task: asyncio.Task[None] | None = None
@@ -131,7 +125,7 @@ class GameRoom:
     def snapshot(self, viewer_id: str) -> dict[str, Any]:
         viewer = self.players.get(viewer_id)
         focus_x, focus_y = self.view_position(viewer) if viewer else (640.0, 480.0)
-        left, top, right, bottom = _view_rect(focus_x, focus_y)
+        left, top, right, bottom = _view_rect(focus_x, focus_y, viewer.view_width if viewer else VIEW_WIDTH, viewer.view_height if viewer else VIEW_HEIGHT)
         player_rows = []
         for player in self.players.values():
             in_view = left <= player.x <= right and top <= player.y <= bottom
@@ -149,6 +143,7 @@ class GameRoom:
                     "alive": player.alive,
                     "score": round(player.score, 1),
                     "colors": player.colors,
+                    "palette": player.palette,
                     "painting": player.painting,
                     "connected": player.connected,
                     "spectatingId": player.spectating_id,
@@ -166,6 +161,7 @@ class GameRoom:
             "phaseStartedAt": self.phase_started_at,
             "phaseEndsAt": self.phase_ends_at,
             "roundNumber": self.round_number,
+            "practice": self.practice,
             "winner": self.winner,
             "resultReason": self.result_reason,
             "spectatingId": viewer.spectating_id if viewer else None,
@@ -228,7 +224,8 @@ class GameRoom:
     def _begin_round(self) -> None:
         self.last_activity = time.monotonic()
         ordered = list(self.players.values())
-        hunter = random.choice(ordered)
+        self.practice = len(ordered) == 1
+        hunter = None if self.practice else random.choice(ordered)
         spawns = list(SPAWNS)
         random.shuffle(spawns)
         for index, player in enumerate(ordered):
@@ -245,7 +242,7 @@ class GameRoom:
         self.winner = None
         self.result_reason = None
         self.round_number += 1
-        self._set_phase("hiding", 30.0)
+        self._set_phase("hunting" if self.practice else "hiding", 0.0 if self.practice else 30.0)
 
     def _finish_round(self, winner: str, reason: str) -> None:
         if self.phase != "hunting":
@@ -258,6 +255,7 @@ class GameRoom:
         self._set_phase("results", 12.0)
 
     def _return_to_lobby(self) -> None:
+        self.practice = False
         for player in self.players.values():
             player.role = "hider"
             player.alive = True
@@ -277,18 +275,23 @@ class GameRoom:
                 await self._notify(player, "방장만 게임을 시작할 수 있습니다.")
             elif self.phase != "lobby":
                 await self._notify(player, "대기실에서만 게임을 시작할 수 있습니다.")
-            elif not 2 <= len(self.players) <= 8:
-                await self._notify(player, "게임 시작에는 2~8명이 필요합니다.")
+            elif not 1 <= len(self.players) <= 8:
+                await self._notify(player, "게임 시작에는 1~8명이 필요합니다.")
             else:
                 self._begin_round()
         elif kind == "return_lobby":
-            if self.phase == "results":
+            if self.phase == "results" or (self.practice and player.player_id == self.host_id):
                 self._return_to_lobby()
         elif kind == "input":
             if self.phase in PAINTABLE_PHASES and player.alive and not player.painting and not player.spectating_id:
                 keys = data.get("keys", {})
                 if isinstance(keys, dict):
                     player.keys = {name: bool(keys.get(name)) for name in ("up", "down", "left", "right")}
+        elif kind == "viewport":
+            width, height = data.get("width"), data.get("height")
+            if all(type(value) in (int, float) and math.isfinite(value) for value in (width, height)):
+                player.view_width = min(max(float(width), 64.0), VIEW_WIDTH)
+                player.view_height = min(max(float(height), 64.0), VIEW_HEIGHT)
         elif kind == "paint_mode":
             if self.phase in PAINTABLE_PHASES and player.alive and player.role == "hider":
                 player.painting = bool(data.get("enabled"))
@@ -296,9 +299,12 @@ class GameRoom:
                     player.keys.clear()
         elif kind == "paint":
             colors = data.get("colors")
+            palette = data.get("palette", player.palette)
             if self.phase in PAINTABLE_PHASES and player.alive and player.role == "hider" and isinstance(colors, list) and len(colors) == 256:
-                if all(type(color) is int and 0 <= color <= 7 for color in colors):
-                    player.colors = [color if i in PAINT_MASK else 0 for i, color in enumerate(colors)]
+                valid_palette = isinstance(palette, list) and 8 <= len(palette) <= 64 and all(isinstance(color, str) and re.fullmatch(r"#[0-9a-fA-F]{6}", color) for color in palette)
+                if valid_palette and all(type(color) is int and 0 <= color < len(palette) for color in colors):
+                    player.palette = [color.lower() for color in palette]
+                    player.colors = [color if PAINT_MASK[i] else 0 for i, color in enumerate(colors)]
         elif kind == "shoot":
             if self.phase == "hunting":
                 self._shoot(player, data, now)
@@ -336,7 +342,7 @@ class GameRoom:
         tx, ty = data.get("x"), data.get("y")
         if not isinstance(tx, (int, float)) or not isinstance(ty, (int, float)):
             return
-        left, top, right, bottom = _view_rect(hunter.x, hunter.y)
+        left, top, right, bottom = _view_rect(hunter.x, hunter.y, hunter.view_width, hunter.view_height)
         if not (left <= tx <= right and top <= ty <= bottom):
             return
         dx, dy = float(tx) - hunter.x, float(ty) - hunter.y
@@ -386,17 +392,17 @@ class GameRoom:
         x = min(max(player.x + dx, 32 + PLAYER_HALF_WIDTH), MAP_WIDTH - 32 - PLAYER_HALF_WIDTH)
         y = min(max(player.y + dy, 32 + PLAYER_HALF_HEIGHT), MAP_HEIGHT - 32 - PLAYER_HALF_HEIGHT)
         candidate = {"x": x, "y": player.y}
-        if not any(_overlap(candidate, obstacle) for obstacle in FURNITURE):
+        if not any(_overlap(candidate, obstacle) for obstacle in OBSTACLES):
             player.x = x
         candidate = {"x": player.x, "y": y}
-        if not any(_overlap(candidate, obstacle) for obstacle in FURNITURE):
+        if not any(_overlap(candidate, obstacle) for obstacle in OBSTACLES):
             player.y = y
 
     def _award_score(self, dt: float) -> None:
         hunter = next((p for p in self.players.values() if p.role == "hunter" and p.alive), None)
         if not hunter:
             return
-        left, top, right, bottom = _view_rect(hunter.x, hunter.y)
+        left, top, right, bottom = _view_rect(hunter.x, hunter.y, hunter.view_width, hunter.view_height)
         for hider in self.players.values():
             if hider.role != "hider" or not hider.alive:
                 continue
@@ -421,7 +427,7 @@ class GameRoom:
             self._set_phase("hunting", 180.0)
         elif self.phase == "hunting":
             self._award_score(dt)
-            if time.time() >= self.phase_ends_at:
+            if self.phase_ends_at and time.time() >= self.phase_ends_at:
                 self._finish_round("hiders", "time_up")
         elif self.phase == "results" and time.time() >= self.phase_ends_at:
             self._return_to_lobby()
@@ -441,18 +447,6 @@ class GameRoom:
                     if time.monotonic() - self.last_activity > 900:
                         self.closed = True
             await asyncio.sleep(max(0.0, 0.05 - (time.monotonic() - started)))
-
-
-PAINT_MASK = tuple(
-    pixel == "1"
-    for row in (
-        "0000000000000000", "0000011110000000", "0000111111000000", "0001111111100000",
-        "0001111111100000", "0000111111000000", "0000011110000000", "0000111111000000",
-        "0001111111100000", "0001111111100110", "0001111111101110", "0000111111111100",
-        "0000111111111000", "0000110011000000", "0001110011100000", "0000000000000000",
-    )
-    for pixel in row
-)
 
 
 class RoomManager:

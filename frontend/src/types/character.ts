@@ -1,36 +1,36 @@
 import { CHARACTER_MASK, CHARACTER_SIZE } from '../data/characterMask.ts'
-import { isPaletteIndex, type PaletteIndex } from '../data/palette.ts'
+import { DEFAULT_PALETTE, MAX_CHARACTER_COLORS, type PaletteIndex } from '../data/palette.ts'
 
 export type PixelCharacter = {
   width: 16
   height: 16
   colors: number[]
+  palette?: string[]
 }
 
 /** TypeScript 타입만으로는 배열 길이나 외부 JSON을 보장할 수 없다. */
 export function isPixelCharacter(value: unknown): value is PixelCharacter {
   if (typeof value !== 'object' || value === null) return false
   const candidate = value as Partial<PixelCharacter>
+  const palette = candidate.palette ?? DEFAULT_PALETTE
   return (
     candidate.width === 16 &&
     candidate.height === 16 &&
     Array.isArray(candidate.colors) &&
     candidate.colors.length === 256 &&
-    Array.from(candidate.colors).every(isPaletteIndex)
+    Array.isArray(palette) && palette.length >= 8 && palette.length <= MAX_CHARACTER_COLORS &&
+    Array.from(palette).every((color) => typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)) &&
+    Array.from(candidate.colors).every((color) => Number.isInteger(color) && color >= 0 && color < palette.length)
   )
 }
 
 export function createDefaultCharacter(): PixelCharacter {
-  const colors = CHARACTER_MASK.map((inside, index) => {
-    if (!inside) return 0
-    const x = index % CHARACTER_SIZE
-    const y = Math.floor(index / CHARACTER_SIZE)
-    if (y === 4 && (x === 5 || x === 9)) return 0
-    if (y > 6 && y < 13 && x >= 6 && x <= 8) return 3
-    if (x === 3 || y === 14 || x > 11) return 1
-    return 2
-  })
-  return { width: 16, height: 16, colors }
+  const colors = CHARACTER_MASK.map((inside) => inside ? 4 : 0)
+  return { width: 16, height: 16, colors, palette: [...DEFAULT_PALETTE] }
+}
+
+export function characterColor(character: PixelCharacter, index: number): string {
+  return (character.palette ?? DEFAULT_PALETTE)[character.colors[index]] ?? '#ffffff'
 }
 
 export type PixelPoint = { x: number; y: number }

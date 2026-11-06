@@ -1,32 +1,1129 @@
 {
-  "columns": 40,
-  "rows": 30,
+  "name": "학교 1층",
+  "columns": 64,
+  "rows": 48,
   "tileSize": 32,
+  "rooms": [
+    {
+      "id": "classroom-a",
+      "name": "1-1 교실",
+      "x": 32,
+      "y": 32,
+      "width": 608,
+      "height": 608,
+      "floor": 1
+    },
+    {
+      "id": "classroom-b",
+      "name": "1-2 교실",
+      "x": 672,
+      "y": 32,
+      "width": 640,
+      "height": 608,
+      "floor": 2
+    },
+    {
+      "id": "library",
+      "name": "도서실",
+      "x": 1344,
+      "y": 32,
+      "width": 672,
+      "height": 608,
+      "floor": 3
+    },
+    {
+      "id": "computer",
+      "name": "컴퓨터실",
+      "x": 32,
+      "y": 928,
+      "width": 640,
+      "height": 576,
+      "floor": 4
+    },
+    {
+      "id": "science",
+      "name": "과학실",
+      "x": 704,
+      "y": 928,
+      "width": 608,
+      "height": 576,
+      "floor": 5
+    },
+    {
+      "id": "restroom",
+      "name": "화장실",
+      "x": 1344,
+      "y": 928,
+      "width": 320,
+      "height": 576,
+      "floor": 6
+    },
+    {
+      "id": "office",
+      "name": "교무실",
+      "x": 1696,
+      "y": 928,
+      "width": 320,
+      "height": 576,
+      "floor": 7
+    }
+  ],
+  "walls": [
+    {
+      "x": 0,
+      "y": 0,
+      "width": 2048,
+      "height": 32
+    },
+    {
+      "x": 0,
+      "y": 1504,
+      "width": 2048,
+      "height": 32
+    },
+    {
+      "x": 0,
+      "y": 32,
+      "width": 32,
+      "height": 1472
+    },
+    {
+      "x": 2016,
+      "y": 32,
+      "width": 32,
+      "height": 1472
+    },
+    {
+      "x": 640,
+      "y": 32,
+      "width": 32,
+      "height": 608
+    },
+    {
+      "x": 1312,
+      "y": 32,
+      "width": 32,
+      "height": 608
+    },
+    {
+      "x": 672,
+      "y": 928,
+      "width": 32,
+      "height": 576
+    },
+    {
+      "x": 1312,
+      "y": 928,
+      "width": 32,
+      "height": 576
+    },
+    {
+      "x": 1664,
+      "y": 928,
+      "width": 32,
+      "height": 576
+    },
+    {
+      "x": 32,
+      "y": 640,
+      "width": 256,
+      "height": 32
+    },
+    {
+      "x": 384,
+      "y": 640,
+      "width": 576,
+      "height": 32
+    },
+    {
+      "x": 1056,
+      "y": 640,
+      "width": 576,
+      "height": 32
+    },
+    {
+      "x": 1728,
+      "y": 640,
+      "width": 288,
+      "height": 32
+    },
+    {
+      "x": 32,
+      "y": 896,
+      "width": 288,
+      "height": 32
+    },
+    {
+      "x": 416,
+      "y": 896,
+      "width": 576,
+      "height": 32
+    },
+    {
+      "x": 1088,
+      "y": 896,
+      "width": 384,
+      "height": 32
+    },
+    {
+      "x": 1568,
+      "y": 896,
+      "width": 224,
+      "height": 32
+    },
+    {
+      "x": 1888,
+      "y": 896,
+      "width": 128,
+      "height": 32
+    }
+  ],
+  "spawns": [
+    {
+      "x": 1024,
+      "y": 784
+    },
+    {
+      "x": 304,
+      "y": 608
+    },
+    {
+      "x": 944,
+      "y": 608
+    },
+    {
+      "x": 1664,
+      "y": 592
+    },
+    {
+      "x": 336,
+      "y": 1424
+    },
+    {
+      "x": 1008,
+      "y": 1424
+    },
+    {
+      "x": 1504,
+      "y": 1280
+    },
+    {
+      "x": 1840,
+      "y": 1344
+    }
+  ],
   "furniture": [
-    { "kind": "teacher", "x": 592, "y": 64, "width": 96, "height": 40 },
-    { "kind": "bookcase", "x": 1088, "y": 48, "width": 64, "height": 48 },
-    { "kind": "desk", "x": 128, "y": 160, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 352, "y": 160, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 576, "y": 160, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 800, "y": 160, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 1024, "y": 160, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 224, "y": 352, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 448, "y": 352, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 672, "y": 352, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 896, "y": 352, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 1120, "y": 352, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 128, "y": 576, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 352, "y": 576, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 576, "y": 576, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 800, "y": 576, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 1024, "y": 576, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 224, "y": 800, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 448, "y": 800, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 672, "y": 800, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 896, "y": 800, "width": 64, "height": 56 },
-    { "kind": "desk", "x": 1120, "y": 800, "width": 64, "height": 56 },
-    { "kind": "plant", "x": 48, "y": 64, "width": 32, "height": 32 },
-    { "kind": "plant", "x": 48, "y": 864, "width": 32, "height": 32 },
-    { "kind": "plant", "x": 1200, "y": 864, "width": 32, "height": 32 }
+    {
+      "kind": "chalkboard",
+      "x": 224,
+      "y": 48,
+      "width": 192,
+      "height": 32,
+      "solid": false
+    },
+    {
+      "kind": "teacherDesk",
+      "x": 272,
+      "y": 112,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 112,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 288,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 464,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 112,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 288,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 464,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 112,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 288,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 464,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "cupboard",
+      "x": 48,
+      "y": 96,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 560,
+      "y": 96,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "clock",
+      "x": 512,
+      "y": 48,
+      "width": 24,
+      "height": 24,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 36,
+      "y": 192,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 36,
+      "y": 352,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 36,
+      "y": 512,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "chalkboard",
+      "x": 864,
+      "y": 48,
+      "width": 192,
+      "height": 32,
+      "solid": false
+    },
+    {
+      "kind": "teacherDesk",
+      "x": 912,
+      "y": 112,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 752,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 928,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 1104,
+      "y": 240,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 752,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 928,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 1104,
+      "y": 368,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 752,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 928,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "studentDesk",
+      "x": 1104,
+      "y": 496,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "cupboard",
+      "x": 688,
+      "y": 96,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1200,
+      "y": 96,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "clock",
+      "x": 1152,
+      "y": 48,
+      "width": 24,
+      "height": 24,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 676,
+      "y": 192,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 676,
+      "y": 352,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "window",
+      "x": 676,
+      "y": 512,
+      "width": 16,
+      "height": 64,
+      "solid": false
+    },
+    {
+      "kind": "bookcase",
+      "x": 1384,
+      "y": 112,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1384,
+      "y": 288,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1512,
+      "y": 112,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1512,
+      "y": 288,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1768,
+      "y": 112,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1768,
+      "y": 288,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1896,
+      "y": 112,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "bookcase",
+      "x": 1896,
+      "y": 288,
+      "width": 64,
+      "height": 96,
+      "solid": true
+    },
+    {
+      "kind": "readingTable",
+      "x": 1424,
+      "y": 480,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "readingTable",
+      "x": 1712,
+      "y": 480,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "readingTable",
+      "x": 1880,
+      "y": 480,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1968,
+      "y": 576,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 112,
+      "y": 720,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 496,
+      "y": 720,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 1136,
+      "y": 720,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 1648,
+      "y": 720,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 112,
+      "y": 816,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 496,
+      "y": 816,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 1136,
+      "y": 816,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bench",
+      "x": 1648,
+      "y": 816,
+      "width": 96,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 64,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 96,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 128,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 704,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 736,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 768,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 1856,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 1888,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "locker",
+      "x": 1920,
+      "y": 672,
+      "width": 32,
+      "height": 40,
+      "solid": true
+    },
+    {
+      "kind": "vending",
+      "x": 1408,
+      "y": 672,
+      "width": 48,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "waterCooler",
+      "x": 1472,
+      "y": 680,
+      "width": 24,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 48,
+      "y": 832,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 624,
+      "y": 832,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1296,
+      "y": 832,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1968,
+      "y": 832,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "bin",
+      "x": 432,
+      "y": 720,
+      "width": 24,
+      "height": 24,
+      "solid": true
+    },
+    {
+      "kind": "bin",
+      "x": 1072,
+      "y": 720,
+      "width": 24,
+      "height": 24,
+      "solid": true
+    },
+    {
+      "kind": "bin",
+      "x": 1744,
+      "y": 720,
+      "width": 24,
+      "height": 24,
+      "solid": true
+    },
+    {
+      "kind": "noticeboard",
+      "x": 848,
+      "y": 680,
+      "width": 96,
+      "height": 40,
+      "solid": false
+    },
+    {
+      "kind": "computerDesk",
+      "x": 96,
+      "y": 1056,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 272,
+      "y": 1056,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 448,
+      "y": 1056,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 96,
+      "y": 1184,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 272,
+      "y": 1184,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 448,
+      "y": 1184,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 96,
+      "y": 1312,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 272,
+      "y": 1312,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "computerDesk",
+      "x": 448,
+      "y": 1312,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "screen",
+      "x": 256,
+      "y": 944,
+      "width": 192,
+      "height": 32,
+      "solid": false
+    },
+    {
+      "kind": "cupboard",
+      "x": 48,
+      "y": 960,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "labBench",
+      "x": 768,
+      "y": 1088,
+      "width": 144,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "labBench",
+      "x": 1024,
+      "y": 1088,
+      "width": 144,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "labBench",
+      "x": 768,
+      "y": 1248,
+      "width": 144,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "labBench",
+      "x": 1024,
+      "y": 1248,
+      "width": 144,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "labShelf",
+      "x": 752,
+      "y": 960,
+      "width": 192,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "sink",
+      "x": 1136,
+      "y": 960,
+      "width": 64,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1232,
+      "y": 1440,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    },
+    {
+      "kind": "toilet",
+      "x": 1384,
+      "y": 976,
+      "width": 32,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1360,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1440,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "stallDoor",
+      "x": 1368,
+      "y": 1104,
+      "width": 64,
+      "height": 8,
+      "solid": false
+    },
+    {
+      "kind": "toilet",
+      "x": 1480,
+      "y": 976,
+      "width": 32,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1456,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1536,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "stallDoor",
+      "x": 1464,
+      "y": 1104,
+      "width": 64,
+      "height": 8,
+      "solid": false
+    },
+    {
+      "kind": "toilet",
+      "x": 1576,
+      "y": 976,
+      "width": 32,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1552,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "partition",
+      "x": 1632,
+      "y": 960,
+      "width": 8,
+      "height": 144,
+      "solid": true
+    },
+    {
+      "kind": "stallDoor",
+      "x": 1560,
+      "y": 1104,
+      "width": 64,
+      "height": 8,
+      "solid": false
+    },
+    {
+      "kind": "sink",
+      "x": 1384,
+      "y": 1408,
+      "width": 64,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "sink",
+      "x": 1512,
+      "y": 1408,
+      "width": 64,
+      "height": 48,
+      "solid": true
+    },
+    {
+      "kind": "mirror",
+      "x": 1384,
+      "y": 1480,
+      "width": 64,
+      "height": 16,
+      "solid": false
+    },
+    {
+      "kind": "mirror",
+      "x": 1512,
+      "y": 1480,
+      "width": 64,
+      "height": 16,
+      "solid": false
+    },
+    {
+      "kind": "bin",
+      "x": 1624,
+      "y": 1424,
+      "width": 24,
+      "height": 24,
+      "solid": true
+    },
+    {
+      "kind": "cupboard",
+      "x": 1728,
+      "y": 960,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "photocopier",
+      "x": 1888,
+      "y": 960,
+      "width": 64,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "teacherDesk",
+      "x": 1744,
+      "y": 1104,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "teacherDesk",
+      "x": 1872,
+      "y": 1232,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "sofa",
+      "x": 1728,
+      "y": 1408,
+      "width": 96,
+      "height": 64,
+      "solid": true
+    },
+    {
+      "kind": "plant",
+      "x": 1968,
+      "y": 1440,
+      "width": 32,
+      "height": 32,
+      "solid": true
+    }
   ]
 }

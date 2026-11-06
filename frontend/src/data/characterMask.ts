@@ -1,25 +1,8 @@
-export const CHARACTER_SIZE = 16
+import definition from '../../../shared/character.json'
 
-const MASK_ROWS = [
-  '0000000000000000',
-  '0000011110000000',
-  '0000111111000000',
-  '0001111111100000',
-  '0001111111100000',
-  '0000111111000000',
-  '0000011110000000',
-  '0000111111000000',
-  '0001111111100000',
-  '0001111111100110',
-  '0001111111101110',
-  '0000111111111100',
-  '0000111111111000',
-  '0000110011000000',
-  '0001110011100000',
-  '0000000000000000',
-] as const
+export const CHARACTER_SIZE = 16
 
 /** 길이 256의 고정 실루엣. 색상 0도 투명이 아닌 유효한 색이다. */
 export const CHARACTER_MASK: readonly boolean[] = Object.freeze(
-  MASK_ROWS.flatMap((row) => [...row].map((pixel) => pixel === '1')),
+  definition.mask.flatMap((row) => [...row].map((pixel) => pixel === '1')),
 )

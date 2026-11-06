@@ -5,8 +5,8 @@ type Props = { messages: ChatMessage[]; currentPlayerId: string; onSend: (text: 
 
 export function RoomChat({ messages, currentPlayerId, onSend, disabled = false }: Props) {
   const [draft, setDraft] = useState('')
-  const bottom = useRef<HTMLDivElement>(null)
-  useEffect(() => bottom.current?.scrollIntoView({ block: 'end' }), [messages.length])
+  const log = useRef<HTMLDivElement>(null)
+  useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight }, [messages.length])
   function submit(event: FormEvent) {
     event.preventDefault()
     const text = draft.trim()
@@ -18,14 +18,13 @@ export function RoomChat({ messages, currentPlayerId, onSend, disabled = false }
   return (
     <section className="panel room-chat" aria-label="전체 채팅">
       <div className="section-label"><h2>전체 채팅</h2><span>LIVE · 160자</span></div>
-      <div className="chat-log" aria-live="polite">
+      <div className="chat-log" ref={log} aria-live="polite">
         {messages.length === 0 && <p className="chat-empty">먼저 인사하거나 술래를 놀려 보세요.</p>}
         {messages.map((message) => (
           <p className={`chat-line ${message.playerId === currentPlayerId ? 'mine' : ''}`} key={message.id}>
             <strong>{message.name}</strong><span>{message.text}</span>
           </p>
         ))}
-        <div ref={bottom} />
       </div>
       <form className="chat-compose" onSubmit={submit}>
         <input aria-label="채팅 메시지" value={draft} maxLength={160} placeholder={disabled ? '서버 연결 중…' : 'Enter로 메시지 보내기'} onChange={(event) => setDraft(event.target.value)} disabled={disabled} />

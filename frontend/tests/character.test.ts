@@ -6,6 +6,7 @@ import {
   createDefaultCharacter,
   isPixelCharacter,
   paintLine,
+  characterColor,
 } from '../src/types/character.ts'
 
 test('실루엣과 기본 캐릭터는 정확히 16×16이고 생성 시 배열을 공유하지 않는다', () => {
@@ -19,6 +20,25 @@ test('실루엣과 기본 캐릭터는 정확히 16×16이고 생성 시 배열�
   assert.ok(isPixelCharacter(first))
   first.colors[0] = 7
   assert.equal(second.colors[0], 0)
+})
+
+test('기본 캐릭터는 좌우 대칭인 흰색 사람 실루엣이다', () => {
+  const character = createDefaultCharacter()
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    assert.equal(CHARACTER_MASK[y * 16 + x], CHARACTER_MASK[y * 16 + 15 - x])
+    if (CHARACTER_MASK[y * 16 + x]) assert.equal(characterColor(character, y * 16 + x), '#ffffff')
+  }
+})
+
+test('스포이드 색상을 팔레트에 추가해도 정확한 RGB와 마스크를 유지한다', () => {
+  const character = createDefaultCharacter()
+  character.palette!.push('#abc123')
+  const painted = paintLine(character, { x: 5, y: 3 }, { x: 10, y: 3 }, 8)
+  assert.ok(isPixelCharacter(painted))
+  assert.equal(characterColor(painted, 3 * 16 + 7), '#abc123')
+  assert.equal(isPixelCharacter({ ...painted, palette: Array(8) }), false)
+  assert.equal(isPixelCharacter({ ...painted, palette: [...painted.palette!, 'red'] }), false)
+  assert.equal(isPixelCharacter({ ...painted, palette: Array(65).fill('#ffffff') }), false)
 })
 
 test('외부 데이터의 크기, 배열 길이, 정수 인덱스, 희소 배열을 검증한다', () => {

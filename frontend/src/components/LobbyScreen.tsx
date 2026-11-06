@@ -70,7 +70,7 @@ export function LobbyScreen({ session, room, connection, error, onCreate, onJoin
             <label>방 코드<input className="room-code-field" value={code} onChange={(event) => setCode(event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5))} minLength={5} maxLength={5} required placeholder="ABCDE" autoComplete="off" /></label>
             <button className="button secondary" disabled={busy || connection !== 'connected' || name.trim().length < 2 || code.length !== 5}>방 입장하기 <span>↗</span></button>
           </form>
-          <div className="lobby-rule-note"><span className="live-dot" /><span>2–8명 · 30초 준비 · 3분 수색 · 매 판 무작위 술래</span></div>
+          <div className="lobby-rule-note"><span className="live-dot" /><span>혼자 테스트 가능 · 2–8명 온라인 · 매 판 무작위 술래</span></div>
         </div>
       ) : (
         <div className="room-lobby-grid">
@@ -83,9 +83,9 @@ export function LobbyScreen({ session, room, connection, error, onCreate, onJoin
               {room.players.map((player, index) => <div className="lobby-player" key={player.id}><span className="player-number">{String(index + 1).padStart(2, '0')}</span><strong>{player.name}{player.id === room.hostId && <em>HOST</em>}{player.id === session?.playerId && <em>YOU</em>}</strong><span className={`ready-indicator ${player.connected ? 'online' : ''}`} />{player.connected ? '온라인' : '연결 중'}</div>)}
               {Array.from({ length: Math.max(0, 2 - room.players.length) }, (_, i) => <div className="lobby-player waiting" key={`open-${i}`}><span className="player-number">··</span><span>초대를 기다리는 중</span></div>)}
             </div>
-            <button className="button primary lobby-start" onClick={onStart} disabled={session?.playerId !== room.hostId || room.players.length < 2 || room.players.length > 8 || connection !== 'connected'}>{session?.playerId === room.hostId ? room.players.length < 2 ? '한 명 더 필요해요' : '무작위 술래로 시작' : '방장이 시작하기를 기다리는 중'} <span>→</span></button>
+            <button className="button primary lobby-start" onClick={onStart} disabled={session?.playerId !== room.hostId || room.players.length > 8 || connection !== 'connected'}>{session?.playerId === room.hostId ? room.players.length === 1 ? '혼자 테스트 시작' : '무작위 술래로 시작' : '방장이 시작하기를 기다리는 중'} <span>→</span></button>
             <button className="text-button lobby-leave" onClick={onLeave}>← 대기실 나가기</button>
-            {me && <p className="host-help">방장이 시작하면 술래가 무작위로 선정됩니다.</p>}
+            {me && <p className="host-help">{room.players.length === 1 ? '혼자 시작하면 대기 시간 없이 이동과 색칠을 자유롭게 확인할 수 있어요.' : '방장이 시작하면 술래가 무작위로 선정됩니다.'}</p>}
           </section>
           <RoomChat messages={room.chat} currentPlayerId={session?.playerId ?? ''} onSend={onChat} disabled={connection !== 'connected'} />
         </div>

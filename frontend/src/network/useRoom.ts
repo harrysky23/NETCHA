@@ -28,6 +28,9 @@ export function useRoom(): RoomHook {
   const [connection, setConnection] = useState<Connection>('connecting')
   const [error, setError] = useState('')
   const socket = useRef<WebSocket | null>(null)
+  const playerId = session?.playerId
+  const roomCode = session?.roomCode
+  const token = session?.token
 
   useEffect(() => {
     let alive = true
@@ -76,7 +79,7 @@ export function useRoom(): RoomHook {
   }, [session])
 
   useEffect(() => {
-    if (!session) {
+    if (!playerId || !roomCode || !token) {
       socket.current?.close()
       socket.current = null
       return
@@ -90,7 +93,7 @@ export function useRoom(): RoomHook {
       setConnection('connecting')
       const scheme = location.protocol === 'https:' ? 'wss:' : 'ws:'
       const nextSocket = new WebSocket(
-        `${scheme}//${location.host}/ws/${encodeURIComponent(session!.roomCode)}/${encodeURIComponent(session!.playerId)}?token=${encodeURIComponent(session!.token)}`,
+        `${scheme}//${location.host}/ws/${encodeURIComponent(roomCode!)}/${encodeURIComponent(playerId!)}?token=${encodeURIComponent(token!)}`,
       )
       socket.current = nextSocket
       nextSocket.onopen = () => {
@@ -123,7 +126,7 @@ export function useRoom(): RoomHook {
       socket.current?.close()
       socket.current = null
     }
-  }, [session?.playerId, session?.roomCode, session?.token])
+  }, [playerId, roomCode, token])
 
   const attach = useCallback((next: RoomSession) => {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ roomCode: next.roomCode, playerId: next.playerId, token: next.token }))

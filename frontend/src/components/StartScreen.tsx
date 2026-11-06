@@ -10,7 +10,7 @@ export function StartScreen({ onStart }: Props) {
         <p className="eyebrow"><span className="tiny-square" /> A LITTLE CAMOUFLAGE EXPERIMENT</p>
         <h1>CHROMIMIC<span className="title-dot">.</span></h1>
         <h2>숨고, 칠하고,<br />들키지 마.</h2>
-        <p className="intro">넓은 강의실에 숨어 나만의 무늬로 위장하세요.<br />가까이서 버틸수록 점수가 빠르게 올라갑니다.</p>
+        <p className="intro">교실, 복도, 화장실에 나만의 무늬로 위장하세요.<br />가까이서 버틸수록 점수가 빠르게 올라갑니다.</p>
         <button className="button primary start-button" onClick={onStart}>온라인 로비 입장 <span aria-hidden="true">↗</span></button>
         <p className="start-note">2~8인 · WASD 이동 · C 키로 색칠 · 클릭으로 사격</p>
       </section>

@@ -1,6 +1,6 @@
 # FastAPI 게임 서버
 
-프로젝트 루트 [README](../README.md)의 실행 순서에 따라 가상환경을 만들고 `requirements.txt`를 설치한 다음 `python run.py`를 실행합니다. 서버 기본 주소는 `http://localhost:8000`입니다.
+프로젝트 루트 [README](../README.md)의 실행 순서에 따라 가상환경을 만들고 `requirements.txt`를 설치한 다음 `python run.py`를 실행합니다. 서버 기본 주소는 `http://localhost:8001`입니다.
 
 - `GET /health`, `GET /api/health`: 서버 상태
 - `POST /api/rooms`: 새 방 생성

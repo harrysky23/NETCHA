@@ -6,7 +6,9 @@ import {
   CLASSROOM_TILES,
   GAME_HEIGHT,
   GAME_WIDTH,
-  PLAYER_SPAWN,
+  PLAYER_SPAWNS,
+  SCHOOL_ROOMS,
+  SCHOOL_WALLS,
   TILE_SIZE,
   WALL_TILE,
 } from '../src/game/map.ts'
@@ -32,14 +34,16 @@ test('모든 키 조합에서 정지 또는 초당 100px이며 반대 입력은 
   )
 })
 
-test('20×15 타일맵의 외곽은 모두 충돌 벽이며 가구는 맵 안에 놓인다', () => {
-  assert.equal(GAME_WIDTH, 640)
-  assert.equal(GAME_HEIGHT, 480)
-  assert.equal(CLASSROOM_TILES.length, 15)
+test('64×48 학교는 7개 공간으로 나뉘고 모든 가구가 외벽 안에 놓인다', () => {
+  assert.equal(GAME_WIDTH, 2048)
+  assert.equal(GAME_HEIGHT, 1536)
+  assert.equal(CLASSROOM_TILES.length, 48)
+  assert.equal(SCHOOL_ROOMS.length, 7)
+  assert.ok(SCHOOL_ROOMS.some((room) => room.id === 'restroom'))
   CLASSROOM_TILES.forEach((row, y) => {
-    assert.equal(row.length, 20)
+    assert.equal(row.length, 64)
     row.forEach((tile, x) => {
-      if (x === 0 || x === 19 || y === 0 || y === 14)
+      if (x === 0 || x === 63 || y === 0 || y === 47)
         assert.equal(tile, WALL_TILE)
     })
   })
@@ -51,18 +55,19 @@ test('20×15 타일맵의 외곽은 모두 충돌 벽이며 가구는 맵 안에
   }
 })
 
-test('생성 지점의 16×16 캐릭터는 벽과 가구에 겹치지 않는다', () => {
-  const { x, y } = PLAYER_SPAWN
+test('모든 생성 지점의 캐릭터가 실내 벽과 가구에 겹치지 않는다', () => {
+  for (const { x, y } of PLAYER_SPAWNS) {
   assert.notEqual(
     CLASSROOM_TILES[Math.floor(y / TILE_SIZE)][Math.floor(x / TILE_SIZE)],
     WALL_TILE,
   )
-  for (const item of CLASSROOM_FURNITURE) {
+  for (const item of [...CLASSROOM_FURNITURE.filter((item) => item.solid), ...SCHOOL_WALLS]) {
     assert.ok(
       x + 8 <= item.x ||
         x - 8 >= item.x + item.width ||
         y + 8 <= item.y ||
         y - 8 >= item.y + item.height,
     )
+  }
   }
 })
