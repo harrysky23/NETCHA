@@ -1,12 +1,22 @@
-export const TILE_SIZE = 32
-export const MAP_COLUMNS = 20
-export const MAP_ROWS = 15
+import mapData from '../../../shared/map.json'
+
+export const TILE_SIZE = mapData.tileSize
+export const MAP_COLUMNS = mapData.columns
+export const MAP_ROWS = mapData.rows
 export const GAME_WIDTH = MAP_COLUMNS * TILE_SIZE
 export const GAME_HEIGHT = MAP_ROWS * TILE_SIZE
+export const VIEW_WIDTH = 640
+export const VIEW_HEIGHT = 480
 export const WALL_TILE = 3
-export const PLAYER_SPAWN = { x: 320, y: 416 } as const
-
-/** 0〜2: 바닥, 3: 벽. 렌더링과 타일 충돌이 같은 데이터를 사용한다. */
+export const PLAYER_SPAWNS = [
+  { x: 288, y: 288 },
+  { x: 992, y: 272 },
+  { x: 992, y: 688 },
+  { x: 288, y: 688 },
+  { x: 704, y: 272 },
+  { x: 704, y: 688 },
+  { x: 416, y: 464 },
+] as const
 export const CLASSROOM_TILES: number[][] = Array.from(
   { length: MAP_ROWS },
   (_, y) =>
@@ -17,22 +27,5 @@ export const CLASSROOM_TILES: number[][] = Array.from(
     ),
 )
 
-export type Furniture = {
-  kind: 'desk' | 'teacher' | 'bookcase' | 'plant'
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-/** 좌표는 좌상단 기준. 가구 그림과 정적 충돌체가 같은 사각형을 공유한다. */
-export const CLASSROOM_FURNITURE: readonly Furniture[] = [
-  { kind: 'teacher', x: 272, y: 64, width: 96, height: 40 },
-  { kind: 'bookcase', x: 528, y: 48, width: 64, height: 48 },
-  ...[128, 224, 320].flatMap((y): Furniture[] =>
-    [112, 288, 464].map((x) => ({ kind: 'desk', x, y, width: 64, height: 56 })),
-  ),
-  { kind: 'plant', x: 48, y: 48, width: 32, height: 32 },
-  { kind: 'plant', x: 48, y: 384, width: 32, height: 32 },
-  { kind: 'plant', x: 560, y: 384, width: 32, height: 32 },
-]
+export type Furniture = (typeof mapData.furniture)[number]
+export const CLASSROOM_FURNITURE: readonly Furniture[] = mapData.furniture

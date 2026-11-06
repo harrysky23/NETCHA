@@ -113,15 +113,15 @@ export function createClassroom(scene: Phaser.Scene) {
 
   const decoration = scene.add.graphics()
   // 벽에 붙어 있는 칠판과 창문: 별도 충돌체 없이 벽 타일의 충돌을 사용한다.
-  decoration.fillStyle(0x8f704b).fillRect(224, 3, 192, 26)
-  decoration.fillStyle(0x293c34).fillRect(228, 5, 184, 20)
+  decoration.fillStyle(0x8f704b).fillRect(544, 3, 192, 26)
+  decoration.fillStyle(0x293c34).fillRect(548, 5, 184, 20)
   decoration
     .fillStyle(0xede3c5)
-    .fillRect(240, 13, 30, 2)
-    .fillRect(240, 18, 18, 1)
-  decoration.fillStyle(0xb8c580).fillRect(336, 10, 6, 6).fillRect(344, 16, 6, 6)
-  decoration.fillStyle(0xede3c5).fillRect(380, 24, 8, 2)
-  for (const y of [96, 224, 352]) {
+    .fillRect(560, 13, 30, 2)
+    .fillRect(560, 18, 18, 1)
+  decoration.fillStyle(0xb8c580).fillRect(656, 10, 6, 6).fillRect(664, 16, 6, 6)
+  decoration.fillStyle(0xede3c5).fillRect(700, 24, 8, 2)
+  for (const y of [96, 256, 416, 576, 736]) {
     decoration.fillStyle(0xede3c5).fillRect(5, y, 22, 64)
     decoration.fillStyle(0x7eaaa8).fillRect(8, y + 3, 16, 58)
     decoration.fillStyle(0xb4ccbb).fillRect(9, y + 4, 6, 56)
@@ -138,5 +138,5 @@ export function createClassroom(scene: Phaser.Scene) {
     )
     obstacles.add(zone)
   }
-  return { walls, obstacles }
+  return { walls, obstacles, decoration }
 }

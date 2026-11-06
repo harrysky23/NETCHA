@@ -1,125 +1,95 @@
 import { lazy, Suspense, useState } from 'react'
+import { GameHUD, ResultsScreen } from './components/GameHUD'
+import { LobbyScreen } from './components/LobbyScreen'
 import { StartScreen } from './components/StartScreen'
-import { PixelEditor } from './components/PixelEditor'
-import { CharacterPreview } from './components/CharacterPreview'
-import { createDefaultCharacter, type PixelCharacter } from './types/character'
+import { useRoom } from './network/useRoom'
 import './App.css'
 
 const GameCanvas = lazy(() => import('./game/GameCanvas'))
 
-type Screen = 'start' | 'editor' | 'game'
-
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('start')
-  const [character, setCharacter] = useState<PixelCharacter>(
-    createDefaultCharacter,
-  )
+  const roomState = useRoom()
+  const [showLobby, setShowLobby] = useState(false)
+  const { session, room } = roomState
+  const page = !session || !room
+    ? showLobby ? 'join' : 'start'
+    : room.phase === 'lobby' ? 'lobby'
+      : room.phase === 'results' ? 'results' : 'game'
+
+  const onChat = (text: string) => roomState.send({ type: 'chat', text })
+  const onStart = () => roomState.send({ type: 'start' })
+
   return (
     <div className="app-shell">
       <header className="site-header">
-        <span className="brand">
-          <span className="brand-mark" aria-hidden="true">
-            ▦
-          </span>{' '}
-          NETCHACAMELEON
-        </span>
-        <span className="version">
-          <span className="live-dot" /> PHASE 01{' '}
-          <span className="version-divider">/</span> LOCAL PROTOTYPE
-        </span>
+        <span className="brand"><span className="brand-mark" aria-hidden="true">▦</span> NETCHACAMELEON</span>
+        <span className="version"><span className="live-dot" /> ONLINE HIDE & SEEK <span className="version-divider">/</span> 2–8 PLAYERS</span>
       </header>
-      {screen === 'start' && (
-        <StartScreen
-          character={character}
-          onStart={() => setScreen('editor')}
+
+      {page === 'start' && <StartScreen onStart={() => { roomState.clearError(); setShowLobby(true) }} />}
+      {(page === 'join' || page === 'lobby') && (
+        <LobbyScreen
+          session={session}
+          room={room}
+          connection={roomState.connection}
+          error={roomState.error}
+          onCreate={roomState.createRoom}
+          onJoin={roomState.joinRoom}
+          onStart={onStart}
+          onLeave={roomState.leaveRoom}
+          onChat={onChat}
+          onClearError={roomState.clearError}
         />
       )}
-      {screen === 'editor' && (
-        <PixelEditor
-          initialCharacter={character}
-          onBack={() => setScreen('start')}
-          onComplete={(next) => {
-            setCharacter(next)
-            setScreen('game')
-          }}
-        />
-      )}
-      {screen === 'game' && (
-        <main className="workspace">
+
+      {page === 'game' && session && room && (
+        <main className="workspace online-room game-workspace">
           <div className="page-heading">
             <div>
-              <p className="eyebrow">02 / EXPLORE THE CLASSROOM</p>
-              <h1>
-                강의실에 스며들기<span className="title-dot">.</span>
-              </h1>
+              <p className="eyebrow">ROOM {room.code} · ROUND {room.roundNumber}</p>
+              <h1>{room.phase === 'hiding' ? '위장을 준비해.' : '가까울수록 더 벌어요.'}<span className="title-dot">.</span></h1>
             </div>
-            <button className="text-button" onClick={() => setScreen('editor')}>
-              ← 다시 칠하기
-            </button>
+            <span className="phase-pill"><i />{room.phase === 'hiding' ? '30초 준비' : '수색 시작'}</span>
           </div>
-          <div className="game-layout">
+          <div className="game-layout online-game-layout">
             <section>
               <div className="game-frame">
-                <div className="panel-bar">
-                  <span>THE CLASSROOM</span>
-                  <span>LOCAL / 01</span>
-                </div>
-                <Suspense
-                  fallback={<p className="loading">강의실 불러오는 중…</p>}
-                >
-                  <GameCanvas character={character} />
+                <div className="panel-bar"><span>CLASSROOM · 40 × 30 TILES</span><span>2–8 ONLINE</span></div>
+                <Suspense fallback={<p className="loading">강의실을 불러오는 중…</p>}>
+                  <GameCanvas room={room} session={session} send={roomState.send} />
                 </Suspense>
               </div>
-              <div className="room-caption">
-                <span>20 × 15 TILES</span>
-                <span>640 × 480 PX</span>
-              </div>
+              <div className="room-caption"><span>1,280 × 960 WORLD</span><span>C · PAINT / WASD · MOVE</span></div>
             </section>
-            <aside className="game-sidebar">
-              <section className="panel room-info">
-                <p className="eyebrow">CLASSROOM / 001</p>
-                <h2>오늘의 은신처</h2>
-                <p>
-                  책상 사이를 걸어 보세요.
-                  <br />내 색이 가장 잘 어울리는 곳은 어디일까요?
-                </p>
-                <hr className="room-rule" />
-                <div
-                  className="keyboard"
-                  aria-label="W 위, A 왼쪽, S 아래, D 오른쪽"
-                >
-                  <kbd>W</kbd>
-                  <kbd>A</kbd>
-                  <kbd>S</kbd>
-                  <kbd>D</kbd>
-                </div>
-                <p className="control-label">WASD로 이동</p>
-              </section>
-              <div className="panel game-character">
-                <CharacterPreview character={character} />
-                <div>
-                  <strong>나의 캐릭터</strong>
-                  <p>16 × 16 / 8 COLORS</p>
-                </div>
-              </div>
-              <button
-                className="button primary"
-                onClick={() => setScreen('editor')}
-              >
-                다시 칠하기 <span aria-hidden="true">↗</span>
-              </button>
-              <p className="game-help">
-                이동이 안 되면 게임 화면을 클릭해 주세요. 벽과 가구는 통과할 수
-                없어요.
-              </p>
-            </aside>
+            <GameHUD
+              room={room}
+              session={session}
+              connected={roomState.connection === 'connected'}
+              onStart={onStart}
+              onLeave={roomState.leaveRoom}
+              onChat={onChat}
+              onReturn={() => roomState.send({ type: 'return_lobby' })}
+            />
           </div>
         </main>
       )}
-      <footer className="site-footer">
-        <span>A STUDY IN COLOR & CAMOUFLAGE</span>
-        <span>작게 칠하고, 자유롭게 탐험하세요.</span>
-      </footer>
+
+      {page === 'results' && session && room && (
+        <>
+          <div className="page-heading results-heading">
+            <div><p className="eyebrow">ROOM {room.code} · BACK TO LOBBY IN 12 SEC</p><span className="connection-badge">라운드 종료</span></div>
+          </div>
+          <ResultsScreen
+            room={room}
+            session={session}
+            connected={roomState.connection === 'connected'}
+            onReturn={() => roomState.send({ type: 'return_lobby' })}
+            onChat={onChat}
+          />
+        </>
+      )}
+
+      <footer className="site-footer"><span>A STUDY IN COLOR & CAMOUFLAGE</span><span>칠하고, 숨고, 한 발에 승부를.</span></footer>
     </div>
   )
 }

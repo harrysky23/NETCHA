@@ -1,0 +1,32 @@
+{
+  "columns": 40,
+  "rows": 30,
+  "tileSize": 32,
+  "furniture": [
+    { "kind": "teacher", "x": 592, "y": 64, "width": 96, "height": 40 },
+    { "kind": "bookcase", "x": 1088, "y": 48, "width": 64, "height": 48 },
+    { "kind": "desk", "x": 128, "y": 160, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 352, "y": 160, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 576, "y": 160, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 800, "y": 160, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 1024, "y": 160, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 224, "y": 352, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 448, "y": 352, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 672, "y": 352, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 896, "y": 352, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 1120, "y": 352, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 128, "y": 576, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 352, "y": 576, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 576, "y": 576, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 800, "y": 576, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 1024, "y": 576, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 224, "y": 800, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 448, "y": 800, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 672, "y": 800, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 896, "y": 800, "width": 64, "height": 56 },
+    { "kind": "desk", "x": 1120, "y": 800, "width": 64, "height": 56 },
+    { "kind": "plant", "x": 48, "y": 64, "width": 32, "height": 32 },
+    { "kind": "plant", "x": 48, "y": 864, "width": 32, "height": 32 },
+    { "kind": "plant", "x": 1200, "y": 864, "width": 32, "height": 32 }
+  ]
+}
